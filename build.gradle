@@ -1,0 +1,32 @@
+plugins {
+    id 'java'
+    id 'org.graalvm.buildtools.native' version '0.9.23'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    gradlePluginPortal()
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+
+    testImplementation 'com.datastax.oss:java-driver-core:4.16.0'
+    testImplementation 'org.testcontainers:cassandra:1.18.3'
+}
+
+test {
+    useJUnitPlatform()
+}
+
+graalvmNative {
+    binaries {
+        all {
+            buildArgs.add("--trace-class-initialization=com.datastax.oss.driver.internal.core.util.Dependency")
+        }
+    }
+}
